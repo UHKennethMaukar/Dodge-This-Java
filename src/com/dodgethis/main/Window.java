@@ -15,8 +15,8 @@ public class Window extends Canvas {
         frame.setMinimumSize(new Dimension(width, height));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false); // game not configured for windows resizing for now
-        frame.setLocationRelativeTo(null); // centers the window at open
+        frame.setResizable(false); //Disables window resizing for now to avoid unwanted technical complexities
+        frame.setLocationRelativeTo(null); //Centers rendered window
         frame.add(game);
         frame.setVisible(true);
         game.start();

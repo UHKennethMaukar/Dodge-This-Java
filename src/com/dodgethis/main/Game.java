@@ -2,6 +2,7 @@ package com.dodgethis.main;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.Random;
 
 public class Game extends Canvas implements Runnable {
 
@@ -11,8 +12,19 @@ public class Game extends Canvas implements Runnable {
     private Thread thread; //To initiate single-threading
     private boolean running = false;
 
+    private Random r;
+    private Handler handler;
+
     public Game(){
+        handler = new Handler(); //Note: keep track of the order of methods/initialisations
+        this.addKeyListener(new KeyInput(handler)); //Listen for key input
+
         new Window(WIDTH, HEIGHT, "Dodge This!", this);
+
+        r = new Random(); //Randomizer for testing purposes
+
+        handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player)); //Spawns player at the centre for now
+
     }
 
     public synchronized void start(){
@@ -26,12 +38,11 @@ public class Game extends Canvas implements Runnable {
             thread.join();
             running = false;
         }catch (Exception e){
-            e.printStackTrace(); // exception handler
+            e.printStackTrace();
         }
     }
 
     public void run(){
-        // A functional game loop template ripped off some place... some fancy math; just works.
         long lastTime = System.nanoTime();
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
@@ -52,15 +63,15 @@ public class Game extends Canvas implements Runnable {
 
             if(System.currentTimeMillis() - timer > 1000){
                 timer += 1000;
-                System.out.println("FPS: " + frames);
+                //System.out.println("FPS: " + frames);
                 frames = 0;
             }
         }
         stop();
-    }
+    } // this is a functional game loop template ripped off some place... just lots of math
 
     private void tick(){
-
+        handler.tick();
     }
 
     private void render(){
@@ -74,6 +85,8 @@ public class Game extends Canvas implements Runnable {
 
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
+
+        handler.render(g);
 
         g.dispose();
         bs.show();
