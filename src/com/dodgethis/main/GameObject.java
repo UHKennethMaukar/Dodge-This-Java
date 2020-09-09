@@ -5,11 +5,11 @@ import java.awt.*;
 //Constructor class for game objects
 public abstract class GameObject {
 
-    protected int x, y;
+    protected float x, y;
     protected ID id;
-    protected int velX, velY; //to control movement speed
+    protected float velX, velY; //to control movement speed
 
-    public GameObject(int x, int y, ID id){
+    public GameObject(float x, float y, ID id){
         this.x = x;
         this.y = y;
         this.id = id;
@@ -30,10 +30,10 @@ public abstract class GameObject {
     public void setY(int y){
         this.y = y;
     }
-    public int getX(){
+    public float getX(){
         return x;
     }
-    public int getY(){
+    public float getY(){
         return y;
     }
     public void setId(ID id){
@@ -48,10 +48,10 @@ public abstract class GameObject {
     public void setVelY(int velY){
         this.velY = velY;
     }
-    public int getVelX(){
+    public float getVelX(){
         return velX;
     }
-    public int getVelY(){
+    public float getVelY(){
         return velY;
     }
 

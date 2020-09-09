@@ -2,17 +2,17 @@ package com.dodgethis.main;
 
 import java.awt.*;
 
-public class BasicEnemy extends GameObject{
+public class FastEnemy extends GameObject{
 
     private Handler handler;
 
-    public BasicEnemy(int x, int y, ID id, Handler handler) {
+    public FastEnemy(int x, int y, ID id, Handler handler) {
         super(x, y, id);
 
         this.handler = handler;
 
-        velX = 3;
-        velY = 3;
+        velX = 2;
+        velY = 7;
     }
 
     public Rectangle getBounds(){
@@ -27,11 +27,11 @@ public class BasicEnemy extends GameObject{
         if(x <= 0 || x >= Game.WIDTH - 16) velX *= -1;
         //Enemy goes in opp direction when it hits bounds
 
-        handler.addObject(new Trail((int)x, (int)y, ID.Trail, Color.red, 16, 16, 0.05f, handler));
+        handler.addObject(new Trail((int)x, (int)y, ID.Trail, Color.cyan, 16, 16, 0.05f, handler));
     }
 
     public void render(Graphics g) {
-        g.setColor(Color.red);
+        g.setColor(Color.cyan);
         g.fillRect((int)x, (int)y, 16, 16);
     }
 }

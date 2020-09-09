@@ -17,6 +17,10 @@ public class Handler {
         }
     }
 
+    public void clearEnemies(){
+        object.removeIf(gameObject -> gameObject.getId()!= ID.Player);
+    }
+
     public void render(Graphics g){
         for(int i = 0; i < object.size(); i++){
             GameObject tempObject = object.get(i);

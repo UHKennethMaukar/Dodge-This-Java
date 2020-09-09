@@ -15,22 +15,25 @@ public class Game extends Canvas implements Runnable {
     private Random r;
     private Handler handler;
     private HUD hud;
+    private Spawn spawner;
 
     public Game(){
-        handler = new Handler(); //Note: keep track of the order of methods/initialisations
-        this.addKeyListener(new KeyInput(handler)); //Listen for key input
+        //Note: keep track of the order of methods/initialisations
+        handler = new Handler();
+        this.addKeyListener(new KeyInput(handler)); //Listens for key input
 
         new Window(WIDTH, HEIGHT, "Dodge This!", this);
 
         hud = new HUD();
-
+        spawner = new Spawn(handler, hud);
         r = new Random(); //Randomizer for testing purposes
 
         handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player, handler)); //Spawns player at the centre for now
-        // for(int i = 0; i < 10; i++) Sample loop to generate set number of basic enemies
-        handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
-        handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
-        handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
+        // for(int i = 0; i < 10; i++) Sample loop to generate set number of game objects
+        // handler.addObject(new BossEnemy( (Game.WIDTH/2) - 48, -156, ID.BossEnemy, handler)); //BossEnemy is spawned off-screen
+        handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.BasicEnemy, handler));
+        handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.BasicEnemy, handler));
+
     }
 
     public synchronized void start(){
@@ -80,6 +83,7 @@ public class Game extends Canvas implements Runnable {
     private void tick(){
         handler.tick();
         hud.tick();
+        spawner.tick();
     }
 
     private void render(){
@@ -102,7 +106,7 @@ public class Game extends Canvas implements Runnable {
         bs.show();
     }
 
-    public static int clamp(int var, int min, int max){
+    public static float clamp(float var, float min, float max){
         if(var >= max)
             return var = max;
         else if(var <= min)
