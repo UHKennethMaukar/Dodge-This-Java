@@ -14,6 +14,7 @@ public class Game extends Canvas implements Runnable {
 
     private Random r;
     private Handler handler;
+    private HUD hud;
 
     public Game(){
         handler = new Handler(); //Note: keep track of the order of methods/initialisations
@@ -21,10 +22,15 @@ public class Game extends Canvas implements Runnable {
 
         new Window(WIDTH, HEIGHT, "Dodge This!", this);
 
+        hud = new HUD();
+
         r = new Random(); //Randomizer for testing purposes
 
-        handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player)); //Spawns player at the centre for now
-
+        handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player, handler)); //Spawns player at the centre for now
+        // for(int i = 0; i < 10; i++) Sample loop to generate set number of basic enemies
+        handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
+        handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
+        handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
     }
 
     public synchronized void start(){
@@ -43,6 +49,7 @@ public class Game extends Canvas implements Runnable {
     }
 
     public void run(){
+        this.requestFocus(); //Auto focus on game initialization by default
         long lastTime = System.nanoTime();
         double amountOfTicks = 60.0;
         double ns = 1000000000 / amountOfTicks;
@@ -72,6 +79,7 @@ public class Game extends Canvas implements Runnable {
 
     private void tick(){
         handler.tick();
+        hud.tick();
     }
 
     private void render(){
@@ -88,9 +96,20 @@ public class Game extends Canvas implements Runnable {
 
         handler.render(g);
 
+        hud.render(g);
+
         g.dispose();
         bs.show();
     }
+
+    public static int clamp(int var, int min, int max){
+        if(var >= max)
+            return var = max;
+        else if(var <= min)
+            return var = min;
+        else
+            return var;
+    } //Method to set game object behavior when it reaches specified bounds
 
     public static void main(String args[]){
         new Game();

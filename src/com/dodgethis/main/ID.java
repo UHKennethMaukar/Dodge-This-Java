@@ -3,6 +3,7 @@ package com.dodgethis.main;
 public enum ID {
 
     Player(),
-    Enemy();
+    BasicEnemy();
 
+    public static ID Trail; //Workaround for Trail ID
 }

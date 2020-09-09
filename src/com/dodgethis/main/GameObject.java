@@ -15,8 +15,13 @@ public abstract class GameObject {
         this.id = id;
     }
 
+    // For revised implementation, move handler to GameObject constructor below as shown
+    // public Handler handler; this.handler = handler; handler.addObject(this);
+    // can now implement new Object() with automatic handler, KIV
+
     public abstract void tick();
     public abstract void render(Graphics g);
+    public abstract Rectangle getBounds(); //For collision detection, rectangular hit-box
 
     //Getter & setters for main parameters
     public void setX(int x){
