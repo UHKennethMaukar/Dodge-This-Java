@@ -38,7 +38,7 @@ public class SmartEnemy extends GameObject{
         if(x <= 0 || x >= Game.WIDTH - 16) velX *= -1;
         //Enemy goes in opp direction when it hits bounds
 
-        handler.addObject(new Trail((int)x, (int)y, ID.Trail, Color.green, 16, 16, 0.05f, handler));
+        handler.addObject(new Trail((int)x, (int)y, ID.Trail, Color.green, 16, 16, 0.04f, handler));
     }
 
     public void render(Graphics g) {

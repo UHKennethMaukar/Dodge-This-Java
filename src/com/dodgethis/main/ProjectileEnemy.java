@@ -32,7 +32,7 @@ public class ProjectileEnemy extends GameObject{
 
         //Enemy goes in opp direction when it hits bounds
 
-        handler.addObject(new Trail((int)x, (int)y, ID.Trail, Color.magenta, 16, 16, 0.05f, handler));
+        handler.addObject(new Trail((int)x, (int)y, ID.Trail, Color.magenta, 16, 16, 0.04f, handler));
     }
 
     public void render(Graphics g) {

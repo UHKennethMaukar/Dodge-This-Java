@@ -22,6 +22,7 @@ public class Game extends Canvas implements Runnable {
       Menu,
       Game,
       Help,
+      End
     }
 
     public STATE gameState = STATE.Menu; //Game state is toggled to Menu when first initialised by default
@@ -29,25 +30,29 @@ public class Game extends Canvas implements Runnable {
     public Game(){
         //Note: keep track of the order of methods/initialisations
         handler = new Handler();
-        menu = new Menu(this, handler);
+        hud = new HUD();
+        menu = new Menu(this, handler, hud);
         this.addKeyListener(new KeyInput(handler)); //Listens for key input
         this.addMouseListener(menu); //Listens for mouse input in menu screen
 
         new Window(WIDTH, HEIGHT, "Dodge This!", this);
 
-        hud = new HUD();
         spawner = new Spawn(handler, hud);
 
         r = new Random(); //Randomizer for testing purposes
 
-        /*if(gameState == STATE.Game)
+        if(gameState == STATE.Game)
         {
             handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player, handler)); //Spawns player at the centre for now
             // for(int i = 0; i < 10; i++) Sample loop to generate set number of game objects
             // handler.addObject(new BossEnemy( (Game.WIDTH/2) - 48, -156, ID.BossEnemy, handler)); //BossEnemy is spawned off-screen
             handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.BasicEnemy, handler));
             handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.BasicEnemy, handler));
-        }*/ //Initialise game migrated to Menu class for now
+        } else {
+            for (int i = 0; i < 15; i++){
+                handler.addObject(new MenuParticle(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.MenuParticle, handler));
+            }
+        }
 
     }
 
@@ -101,7 +106,18 @@ public class Game extends Canvas implements Runnable {
         {
             hud.tick();
             spawner.tick();
-        } else if(gameState == STATE.Menu){
+
+            if(HUD.HP <= 0){
+                HUD.HP = 100;
+
+                gameState = STATE.End;
+                handler.object.clear();
+                for (int i = 0; i < 15; i++){
+                    handler.addObject(new MenuParticle(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.MenuParticle, handler));
+                }
+            }
+
+        } else if(gameState == STATE.Menu || gameState == STATE.End){
             menu.tick();
         }
 
@@ -124,7 +140,7 @@ public class Game extends Canvas implements Runnable {
         if(gameState == STATE.Game)
         {
             hud.render(g);
-        } else if(gameState == STATE.Menu || gameState == STATE.Help){
+        } else if(gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.End){
             menu.render(g);
         }
 

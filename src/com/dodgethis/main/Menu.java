@@ -9,11 +9,13 @@ public class Menu extends MouseAdapter {
 
     private Game game;
     private Handler handler;
+    private HUD hud;
     private Random r = new Random();
 
-    public Menu(Game game, Handler handler){
+    public Menu(Game game, Handler handler, HUD hud){
         this.game =  game;
         this.handler = handler;
+        this.hud = hud;
     }
 
     public void mousePressed(MouseEvent e){ //Stores x & y coordinates of mouse press
@@ -24,9 +26,9 @@ public class Menu extends MouseAdapter {
             //Play button
             if(mouseOver(mx, my, 215, 150, 200, 64)){
                 game.gameState = Game.STATE.Game;
-                handler.addObject(new Player(Game.WIDTH/2-32, Game.HEIGHT/2-32, ID.Player, handler)); //Spawns player at the centre for now
+                handler.addObject(new Player(Game.WIDTH/2-32, Game.HEIGHT/2-32, ID.Player, handler));
+                handler.clearEnemies();
                 // for(int i = 0; i < 10; i++) Sample loop to generate set number of game objects
-                // handler.addObject(new BossEnemy( (Game.WIDTH/2) - 48, -156, ID.BossEnemy, handler)); //BossEnemy is spawned off-screen
                 handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.BasicEnemy, handler));
                 handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.BasicEnemy, handler));
             }
@@ -49,6 +51,20 @@ public class Menu extends MouseAdapter {
             }
         }
 
+        //Try Again button in Game Over screen
+        if(game.gameState == Game.STATE.End){
+            if(mouseOver(mx, my, 215, 350, 200, 64)){
+                game.gameState = Game.STATE.Game;
+                hud.setLevel(1);
+                hud.setScore(0);
+                handler.addObject(new Player(Game.WIDTH/2-32, Game.HEIGHT/2-32, ID.Player, handler));
+                handler.clearEnemies();
+                // for(int i = 0; i < 10; i++) Sample loop to generate set number of game objects
+                handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.BasicEnemy, handler));
+                handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.BasicEnemy, handler));
+            }
+        }
+
     }
 
     public void mouseReleased(MouseEvent e){
@@ -66,13 +82,13 @@ public class Menu extends MouseAdapter {
     }
 
     public void render(Graphics g){
-        if(game.gameState == Game.STATE.Menu) {
+        if(game.gameState == Game.STATE.Menu) { //Convert to switch-case, possibly?
             Font fnt = new Font("arial", Font.BOLD, 50);
             Font fnt2 = new Font("arial", Font.BOLD, 30);
 
             g.setFont(fnt);
             g.setColor(Color.white);
-            g.drawString("Menu", 245, 70);
+            g.drawString("Dodge This!", 175, 70);
 
             g.setFont(fnt2);
             g.drawRect(215, 150, 200, 64);
@@ -92,12 +108,27 @@ public class Menu extends MouseAdapter {
             g.setColor(Color.white);
             g.drawString("Help", 245, 70);
 
+            g.setFont(fnt3);
+            g.drawString("Use WASD keys to move player and dodge enemies", 50, 200);
+
             g.setFont(fnt2);
             g.drawRect(215, 350, 200, 64);
             g.drawString("Back", 280, 390);
+        } else if(game.gameState == Game.STATE.End){
+            Font fnt = new Font("arial", Font.BOLD, 50);
+            Font fnt2 = new Font("arial", Font.BOLD, 30);
+            Font fnt3 = new Font("arial", Font.BOLD, 20);
+
+            g.setFont(fnt);
+            g.setColor(Color.white);
+            g.drawString("Game Over", 185, 70);
+
+            g.setFont(fnt2);
+            g.drawRect(215, 350, 200, 64);
+            g.drawString("Your score: " + hud.getScore(), 200, 200);
 
             g.setFont(fnt3);
-            g.drawString("Use WASD keys to move player and dodge enemies", 50, 200);
+            g.drawString("Try Again", 270, 390);
         }
     }
 

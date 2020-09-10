@@ -24,9 +24,11 @@ public class Spawn {
 
             //Spawning system set to levels, note order matters, coinciding levels will override
                 handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH - 50), r.nextInt(Game.HEIGHT - 50), ID.BasicEnemy, handler));
-            if(hud.getLevel() % 10 == 0) {
+            if(hud.getLevel() == 10) {
                 handler.clearEnemies();
                 handler.addObject(new BossEnemy( (Game.WIDTH/2) - 48, -240, ID.BossEnemy, handler)); //BossEnemy is spawned off-screen
+            } else if(hud.getLevel() % 10 == 0) {
+                handler.addObject(new BossEnemy( (Game.WIDTH/2) - 48, -240, ID.BossEnemy, handler));
             } else if(hud.getLevel() % 4 == 0) {
                 handler.addObject(new SmartEnemy(r.nextInt(Game.WIDTH - 50), r.nextInt(Game.HEIGHT - 50), ID.SmartEnemy, handler));
             } else if(hud.getLevel() % 3 == 0) {

@@ -35,7 +35,7 @@ public class BossEnemy extends GameObject{
         else timer--;
 
         if(timer2 <= 0){
-            if (velX == 0) velX = 3;
+            if (velX == 0) velX = 5;
             // if(velX > 0) velX += 0.05f;
             // else if(velX < 0) velX -= 0.05f; //Code for acceleration, redacted for now
 
@@ -48,7 +48,7 @@ public class BossEnemy extends GameObject{
     }
 
     public void render(Graphics g) {
-        g.setColor(Color.red);
+        g.setColor(Color.yellow);
         g.fillRect((int)x, (int)y, 96, 96);
     }
 }
