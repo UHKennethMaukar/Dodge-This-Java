@@ -6,10 +6,12 @@ import java.awt.event.KeyEvent;
 //For Keyboard input
 public class KeyInput extends KeyAdapter{
 
+    private Game game;
     private Handler handler;
     private boolean[] keyDown = new boolean[4];
 
-    public KeyInput(Handler handler){
+    public KeyInput(Handler handler, Game game){
+        this.game = game;
         this.handler = handler;
 
         keyDown[0]=false;
@@ -28,14 +30,20 @@ public class KeyInput extends KeyAdapter{
             if(tempObject.getId() == ID.Player){
                 //key events for player
 
-                if(key == KeyEvent.VK_W) { tempObject.setVelY(-5); keyDown[0]=true; }
-                if(key == KeyEvent.VK_S) { tempObject.setVelY(5); keyDown[1]=true; }
-                if(key == KeyEvent.VK_A) { tempObject.setVelX(-5); keyDown[2]=true; }
-                if(key == KeyEvent.VK_D) { tempObject.setVelX(5); keyDown[3]=true; }
+                if(key == KeyEvent.VK_W) { tempObject.setVelY(-handler.spd); keyDown[0]=true; }
+                if(key == KeyEvent.VK_S) { tempObject.setVelY(handler.spd); keyDown[1]=true; }
+                if(key == KeyEvent.VK_A) { tempObject.setVelX(-handler.spd); keyDown[2]=true; }
+                if(key == KeyEvent.VK_D) { tempObject.setVelX(handler.spd); keyDown[3]=true; }
 
             }
-        }
 
+        }
+        if(key == KeyEvent.VK_P) Game.paused = !Game.paused; //For pause menu
+        if(key == KeyEvent.VK_ESCAPE) System.exit(1);
+        if(key == KeyEvent.VK_SPACE){
+            if(game.gameState == Game.STATE.Game) game.gameState = Game.STATE.Shop;
+            else if (game.gameState== Game.STATE.Shop) game.gameState = Game.STATE.Game;
+        }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -56,8 +64,6 @@ public class KeyInput extends KeyAdapter{
                 if(!keyDown[2] && !keyDown[3]) tempObject.setVelX(0); //Vertical movement
             }
         }
-
-        if(key == KeyEvent.VK_ESCAPE) System.exit(1);
 
     }
 

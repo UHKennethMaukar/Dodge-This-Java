@@ -12,15 +12,21 @@ public class Game extends Canvas implements Runnable {
     private Thread thread; //To initiate single-threading
     private boolean running = false;
 
+    public static boolean paused = false;
+    public int diff = 0; //For difficulty mode: 0 = Classic, 1 = Hardcore
+
     private Random r;
     private Handler handler;
     private HUD hud;
     private Spawn spawner;
     private Menu menu;
+    private Shop shop;
 
     public enum STATE { //Casts STATE as a type holding 'Menu' & 'Game' values
       Menu,
+      Select,
       Game,
+      Shop,
       Help,
       End
     }
@@ -28,16 +34,18 @@ public class Game extends Canvas implements Runnable {
     public STATE gameState = STATE.Menu; //Game state is toggled to Menu when first initialised by default
 
     public Game(){
-        //Note: keep track of the order of methods/initialisations
+        //Note: keep track of the order of methods/initialisations (to avoid null pointers)
         handler = new Handler();
         hud = new HUD();
+        shop = new Shop(handler, hud);
         menu = new Menu(this, handler, hud);
-        this.addKeyListener(new KeyInput(handler)); //Listens for key input
+        this.addKeyListener(new KeyInput(handler, this)); //Listens for key input
         this.addMouseListener(menu); //Listens for mouse input in menu screen
+        this.addMouseListener(shop); //Listens for mouse input in shop
 
         new Window(WIDTH, HEIGHT, "Dodge This!", this);
 
-        spawner = new Spawn(handler, hud);
+        spawner = new Spawn(handler, hud, this);
 
         r = new Random(); //Randomizer for testing purposes
 
@@ -101,24 +109,29 @@ public class Game extends Canvas implements Runnable {
     } // this is a functional game loop template ripped off some place... just lots of math
 
     private void tick(){
-        handler.tick();
+
         if(gameState == STATE.Game)
         {
-            hud.tick();
-            spawner.tick();
+            if(!paused) //Only available when game is not paused
+            {
+                handler.tick();
+                hud.tick();
+                spawner.tick();
 
-            if(HUD.HP <= 0){
-                HUD.HP = 100;
+                if(HUD.HP <= 0){
+                    HUD.HP = 100;
 
-                gameState = STATE.End;
-                handler.object.clear();
-                for (int i = 0; i < 15; i++){
-                    handler.addObject(new MenuParticle(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.MenuParticle, handler));
+                    gameState = STATE.End;
+                    handler.object.clear();
+                    for (int i = 0; i < 15; i++){
+                        handler.addObject(new MenuParticle(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.MenuParticle, handler));
+                    }
                 }
             }
 
-        } else if(gameState == STATE.Menu || gameState == STATE.End){
+        } else if(gameState == STATE.Menu || gameState == STATE.End || gameState == STATE.Select){
             menu.tick();
+            handler.tick();
         }
 
     }
@@ -135,13 +148,19 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        handler.render(g);
+        if(paused){
+            g.setColor(Color.white);
+            g.drawString("PAUSED", 100, 100);
+        }
 
-        if(gameState == STATE.Game)
-        {
+        if(gameState == STATE.Game){
             hud.render(g);
-        } else if(gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.End){
+            handler.render(g);
+        } else if(gameState == STATE.Shop){
+            shop.render(g);
+        } else if(gameState == STATE.Menu || gameState == STATE.Help || gameState == STATE.End || gameState == STATE.Select){
             menu.render(g);
+            handler.render(g);
         }
 
 
