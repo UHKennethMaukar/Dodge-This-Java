@@ -11,11 +11,13 @@ public class Menu extends MouseAdapter {
     private Handler handler;
     private HUD hud;
     private Random r = new Random();
+    private Shop shop;
 
-    public Menu(Game game, Handler handler, HUD hud){
+    public Menu(Game game, Handler handler, HUD hud, Shop shop){
         this.game =  game;
         this.handler = handler;
         this.hud = hud;
+        this.shop = shop;
     }
 
     public void mousePressed(MouseEvent e){ //Stores x & y coordinates of mouse press
@@ -41,6 +43,7 @@ public class Menu extends MouseAdapter {
             //Help button
             if(mouseOver(mx, my, 215, 250, 200, 64)){
                 game.gameState = Game.STATE.Help;
+                handler.clearEnemies();
             }
 
             //Quit button
@@ -53,6 +56,12 @@ public class Menu extends MouseAdapter {
             //Classic difficulty button
             if(mouseOver(mx, my, 215, 150, 200, 64)){
                 game.gameState = Game.STATE.Game;
+                hud.bounds = 0;
+                handler.spd = 5;
+                shop.B1 = 500;
+                shop.B2 = 500;
+                shop.B3 = 100;
+
                 handler.addObject(new Player(Game.WIDTH/2-32, Game.HEIGHT/2-32, ID.Player, handler));
                 handler.clearEnemies();
                 // for(int i = 0; i < 10; i++) Sample loop to generate set number of game objects
@@ -65,6 +74,12 @@ public class Menu extends MouseAdapter {
             //Hardcore difficulty button
             if(mouseOver(mx, my, 215, 250, 200, 64)){
                 game.gameState = Game.STATE.Game;
+                hud.bounds = 0;
+                handler.spd = 5;
+                shop.B1 = 500;
+                shop.B2 = 500;
+                shop.B3 = 100;
+
                 handler.addObject(new Player(Game.WIDTH/2-32, Game.HEIGHT/2-32, ID.Player, handler));
                 handler.clearEnemies();
                 // for(int i = 0; i < 10; i++) Sample loop to generate set number of game objects
@@ -85,6 +100,9 @@ public class Menu extends MouseAdapter {
         if(game.gameState == Game.STATE.Help){
             if(mouseOver(mx, my, 215, 350, 200, 64)){
                 game.gameState = Game.STATE.Menu;
+                for (int i = 0; i < 15; i++) {
+                    handler.addObject(new MenuParticle(r.nextInt(Game.WIDTH), r.nextInt(Game.HEIGHT), ID.MenuParticle, handler));
+                }
             }
         }
 

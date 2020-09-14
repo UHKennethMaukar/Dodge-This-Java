@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DodgeThis:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DodgeThis_jar</output-path>
+    <root id="archive" name="DodgeThis.jar">
+      <element id="module-output" name="DodgeThis" />
+    </root>
+  </artifact>
+</component>

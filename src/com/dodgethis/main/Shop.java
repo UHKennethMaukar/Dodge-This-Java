@@ -9,9 +9,9 @@ public class Shop extends MouseAdapter {
     Handler handler;
     HUD hud;
 
-    private int B1 = 100;
-    private int B2 = 100;
-    private int B3 = 100;
+    public int B1 = 500;
+    public int B2 = 500;
+    public int B3 = 100;
 
     public Shop(Handler handler, HUD hud){
         this.handler = handler;
@@ -53,7 +53,7 @@ public class Shop extends MouseAdapter {
                 // System.out.println("Box 1"); for debugging
                 if(hud.getScore() >= B1){
                     hud.setScore(hud.getScore() - B1);
-                    B1 += 100;
+                    B1 += 500;
                     hud.bounds += 20;
                     hud.HP = 100 + (hud.bounds)/2;
                 }
@@ -65,7 +65,7 @@ public class Shop extends MouseAdapter {
             if(my >= 100 && my <= 180){
                 if(hud.getScore() >= B2){
                     hud.setScore(hud.getScore() - B2);
-                    B2 += 100;
+                    B2 += 500;
                     handler.spd++;
                 }
             }
@@ -76,6 +76,7 @@ public class Shop extends MouseAdapter {
             if(my >= 100 && my <= 180){
                 if(hud.getScore() >= B3){
                     hud.setScore(hud.getScore() - B3);
+                    B3 = B3*2;
                     hud.HP = 100 + (hud.bounds)/2;
                 }
             }

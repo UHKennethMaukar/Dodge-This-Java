@@ -38,7 +38,7 @@ public class Game extends Canvas implements Runnable {
         handler = new Handler();
         hud = new HUD();
         shop = new Shop(handler, hud);
-        menu = new Menu(this, handler, hud);
+        menu = new Menu(this, handler, hud, shop);
         this.addKeyListener(new KeyInput(handler, this)); //Listens for key input
         this.addMouseListener(menu); //Listens for mouse input in menu screen
         this.addMouseListener(shop); //Listens for mouse input in shop
@@ -51,6 +51,8 @@ public class Game extends Canvas implements Runnable {
 
         if(gameState == STATE.Game)
         {
+            hud.bounds = 0;
+            handler.spd = 5;
             handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player, handler)); //Spawns player at the centre for now
             // for(int i = 0; i < 10; i++) Sample loop to generate set number of game objects
             // handler.addObject(new BossEnemy( (Game.WIDTH/2) - 48, -156, ID.BossEnemy, handler)); //BossEnemy is spawned off-screen
